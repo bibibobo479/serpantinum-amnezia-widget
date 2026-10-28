@@ -1,0 +1,12 @@
+name: Widget tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y python3-gi dbus
+      - run: /usr/bin/python3 -m unittest discover -s tests -p test_core.py -v
+      - run: AMNEZIA_TEST_PRIVATE_BUS=1 dbus-run-session -- /usr/bin/python3 tests/test_dbus.py
